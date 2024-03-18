@@ -11,7 +11,7 @@ function SongEditForm() {
     name: "",
     artist: "",
     album: "",
-    title: "",
+    time: "",
     is_favorite: false,
   });
 
@@ -81,13 +81,13 @@ function SongEditForm() {
           value={song.album}
           onChange={handleTextChange}
         />
-        <label htmlFor="title">Title:</label>
+        <label htmlFor="time">Title:</label>
         <input
-          id="title"
+          id="time"
           type="text"
-          name="title"
-          onChange={handleCheckboxChange}
-          checked={song.title}
+          name="time"
+          onChange={handleTextChange}
+          checked={song.time}
         />
         <label htmlFor="is_favorite">Favorote:</label>
         <input

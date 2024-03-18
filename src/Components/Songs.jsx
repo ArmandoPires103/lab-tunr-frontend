@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Song from "./Song";
 
 const API = import.meta.env.VITE_BASE_URL;
 
 function Songs() {
   const [songs, setSongs] = useState([]);
+
   useEffect(() => {
-    fetch(`http://localhost:3003/songs`)
-      .then((res) => {
-        return res.json();
-      })
+    fetch(`${API}/songs`)
+      .then((res) => res.json())
       .then((data) => {
         setSongs(data);
       })
@@ -22,15 +21,15 @@ function Songs() {
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th>Take me there</th>
-              <th>See this song</th>
+              <th>Name</th>
+              <th>Artist</th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody>
-            {songs.map((song) => {
-              return <Song key={song.id} song={song} />;
-            })}
+            {songs.map((song) => (
+              <Song key={song.id} song={song} />
+            ))}
           </tbody>
         </table>
       </section>

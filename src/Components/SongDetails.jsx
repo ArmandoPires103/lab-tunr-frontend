@@ -36,7 +36,7 @@ function SongDetails() {
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {song.artist}
       </h5>
       <h6>{song.album}</h6>
-      <p>{song.title}</p>
+      <p>{song.time}</p>
       <div className="showNavigation">
         <div>
           <Link to={`/bookmarks`}>
