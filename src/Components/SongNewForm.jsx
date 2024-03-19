@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const API = import.meta.env.VITE_BASE_URL;
 
@@ -9,81 +9,76 @@ function SongNewForm() {
     name: "",
     artist: "",
     album: "",
-    title: "",
+    time: "",
     is_favorite: false,
   });
 
-  // Add a bookmark. Redirect to the index view.
-  const addSong = () => {
-    fetch(`/songs`, {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    fetch(`${API}/songs`, {
       method: "POST",
-      body: JSON.stringify(song),
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(song),
     })
-      .then(() => {
-        navigate(`/songs`);
-      })
-      .catch((error) => console.error("catch", error));
+      .then(() => navigate("/songs"))
+      .catch((error) => console.error(error));
   };
 
-  const handleTextChange = (event) => {
-    setSong({ ...song, [event.target.id]: event.target.value });
-  };
-
-  const handleCheckboxChange = () => {
-    setSong({ ...song, is_favorite: !song.is_favorite });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addSong();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setSong({ ...song, [name]: value });
   };
 
   return (
-    <div className="New">
+    <div>
+      <h2>Add New Song</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
         <input
-          id="name"
-          value={song.name}
           type="text"
-          onChange={handleTextChange}
+          id="name"
+          name="name"
+          value={song.name}
+          onChange={handleInputChange}
         />
         <label htmlFor="artist">Artist:</label>
         <input
-          id="artist"
           type="text"
+          id="artist"
+          name="artist"
           value={song.artist}
-          onChange={handleTextChange}
+          onChange={handleInputChange}
         />
         <label htmlFor="album">Album:</label>
         <input
-          id="album"
           type="text"
+          id="album"
           name="album"
           value={song.album}
-          onChange={handleTextChange}
+          onChange={handleInputChange}
         />
         <label htmlFor="time">Time:</label>
         <input
-          id="time"
           type="text"
+          id="time"
           name="time"
-          onChange={handleTextChange}
-          checked={song.time}
+          value={song.time}
+          onChange={handleInputChange}
         />
-        <label htmlFor="is_favorite">Favorote:</label>
+        <label htmlFor="is_favorite">Is Favorite:</label>
         <input
-          id="is_favorite"
           type="checkbox"
-          onChange={handleCheckboxChange}
+          id="is_favorite"
+          name="is_favorite"
           checked={song.is_favorite}
+          onChange={(e) =>
+            setSong({ ...song, is_favorite: e.target.checked })
+          }
         />
-        <br />
-
-        <input type="submit" />
+        <button type="submit">Submit</button>
+        <Link to="/songs">Cancel</Link>
       </form>
     </div>
   );

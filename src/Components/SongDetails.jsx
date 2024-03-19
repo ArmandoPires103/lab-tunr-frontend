@@ -1,58 +1,40 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+
 const API = import.meta.env.VITE_BASE_URL;
 
-
 function SongDetails() {
-  const [song, setSong] = useState([]);
-
+  const [song, setSong] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/songs/${id}`)
-      .then((response) => response.json())
+    fetch(`${API}/songs/${id}`)
+      .then((res) => res.json())
       .then((data) => setSong(data))
       .catch((error) => console.error(error));
   }, [id]);
 
-  function deleteSong() {
-    fetch(`/songs/${id}`, {
+  const deleteSong = () => {
+    fetch(`${API}/songs/${id}`, {
       method: "DELETE",
     })
-      .then(() => navigate(`/songs`))
+      .then(() => navigate("/songs"))
       .catch((error) => console.error(error));
-  }
+  };
 
   return (
-    <article>
-      <h3>
-        {song.is_favorite ? <span>⭐️</span> : null} {song.name}
-      </h3>
-      <h5>
-        <span>
-          <a href={song.artist}>{song.name}</a>
-        </span>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {song.artist}
-      </h5>
-      <h6>{song.album}</h6>
-      <p>{song.time}</p>
-      <div className="showNavigation">
-        <div>
-          <Link to={`/bookmarks`}>
-            <button>Back</button>
-          </Link>
-        </div>
-        <div>
-          <Link to={`/songs/${id}/edit`}>
-            <button>Edit</button>
-          </Link>
-        </div>
-        <div>
-          <button onClick={deleteSong}>Delete</button>
-        </div>
-      </div>
-    </article>
+    <div>
+      <h2>{song.name}</h2>
+      <p>Artist: {song.artist}</p>
+      <p>Album: {song.album}</p>
+      <p>Time: {song.time}</p>
+      <p>Is Favorite: {song.is_favorite ? "Yes" : "No"}</p>
+      <button onClick={deleteSong}>Delete</button>
+      <Link to={`/songs/${id}/edit`}>Edit</Link>
+      <br />
+      <Link to="/songs">Back to Songs</Link>
+    </div>
   );
 }
 
